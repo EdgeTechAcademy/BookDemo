@@ -113,8 +113,6 @@ public class BookController {
         return "bookList";
     }
 
-
-
     //  create a random book and add to the database
     @RequestMapping("/add")                                    //  this code will be reached by /books/add
     public String add(Model model) {
