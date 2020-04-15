@@ -1,7 +1,5 @@
 package com.example.demo.models;
 
-//import javax.persistence.*;
-
 import javax.persistence.*;
 
 @Entity

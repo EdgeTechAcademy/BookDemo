@@ -19,9 +19,10 @@ import java.util.List;
  *  For details read this page
  *  https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
  *  We added to this interface findByCategory. Spring will create a method and SELECT statement to do just
- *  what you would expect - find Boook records that match the desired category.
+ *  what you would expect - find Book records that match the desired category.
  */
 @Repository
 public interface BookRepository extends CrudRepository<Book, Integer> {
     List<Book> findByAuthor(String author);
+    List<Book> findByTitleContaining(String title);
 }

@@ -92,11 +92,28 @@ public class BookController {
         Iterable<Book> list = bookService.findByAuthor(author);
 
         //  pass the list of books by author
+        model.addAttribute("author", author);
         model.addAttribute("books", list);
 
         //  the the bookList page will be happy to display it
         return "bookList";
     }
+
+    //  using the author from the search form get all books by this author
+    @RequestMapping(value = "/title", method = RequestMethod.POST)
+    public String searchTitle(@RequestParam String title, Model model ){
+        //  SEARCH for all books by author
+        Iterable<Book> list = bookService.findByTitle(title);
+
+        //  pass the list of books by title back to the web page
+        model.addAttribute("title", title);
+        model.addAttribute("books", list);
+
+        //  the the bookList page will be happy to display it
+        return "bookList";
+    }
+
+
 
     //  create a random book and add to the database
     @RequestMapping("/add")                                    //  this code will be reached by /books/add

@@ -10,12 +10,19 @@ import java.util.Optional;
 @Service
 public class BookService {
 /**
- * 		TODO	BookService
+ * 		ATTENTION	BookService
  * 				These are the APIs we expose to the Controllers
  * 				We pretty much have all of them enable. Frequently you would change how the delete code works
  * 				probably by setting an 'active' attribute to false and saving the record and NOT deleting anything
+ *          These lines of code to a great deal of work
+ *          We extend the CrudRepository which makes this object knowledgeable about
+ *              how to add, find, remove records froms a database
+ *          The @Service tells SpringBoot that it is able to handle requests to interface with the database
+ *          We make it an interface which means someone needs to supply lots of code to fill in the missing methods
+ *              SpringBoot does that for us. SpringBoot will see we need find, create, delete, update code
+ *              for a Book class and it will generate them
+ *
  */
-
     @Autowired
     private BookRepository bookRepository;
 
@@ -43,5 +50,9 @@ public class BookService {
 
     public Iterable<Book> findByAuthor(String author) {
         return bookRepository.findByAuthor(author);
+    }
+
+    public Iterable<Book> findByTitle(String title) {
+        return bookRepository.findByTitleContaining(title);
     }
 }
