@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
-
     <title>Books</title>
-
     <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
 </head>
 <body>
 <div class="container">
     <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
-
     <form class="form-horizontal" th:action="@{/books/search}" method="post">
         <div class="form-group">
             <label class="col-sm-1 control-label">Author:</label>
@@ -31,7 +28,6 @@
         </div>
     </form>
     <hr>
-
     <div th:if="${not #lists.isEmpty(books)}">
         <h3>Book List</h3>
         <table class="table table-striped">
@@ -45,12 +41,11 @@
                 <th>Delete</th>
             </tr>
             <tr th:each="book : ${books}">
-                <td th:text="${book.id}">Customer Id</td>
-                <td th:text="${book.title}">Name</td>
-                <td th:text="${book.author}">Address</td>
-                <td th:text="${book.pageCount}">Phone Number</td>
-                <!--	These items have been added for the new functionality-->
-                <!--		to make our app a richer MVC example-->
+                <td th:text="${book.id}">Id</td>
+                <td th:text="${book.title}">Title</td>
+                <td th:text="${book.author}">Author</td>
+                <td th:text="${book.pageCount}">Page Count</td>
+
                 <td><a th:href="${ '/books/'        + book.id}">View</a></td>
                 <td><a th:href="${ '/books/edit/'   + book.id}">Edit</a></td>
                 <td><a th:href="${ '/books/delete/' + book.id}">Delete</a></td>
