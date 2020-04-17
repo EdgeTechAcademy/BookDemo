@@ -48,11 +48,11 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public Iterable<Book> findByAuthor(String author) {
-        return bookRepository.findByAuthor(author);
-    }
-
     public Iterable<Book> findByTitle(String title) {
         return bookRepository.findByTitleContaining(title);
+    }
+
+    public Iterable<Book> findByAuthor(String author) {
+        return bookRepository.findByAuthor(author);
     }
 }

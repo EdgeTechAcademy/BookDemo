@@ -17,7 +17,7 @@ import java.util.List;
 public class BookController {
 
     @Autowired
-    //	@Autowired will request SpringBoot to find the ProductService class and instantiate one for us
+    //	@Autowired will request SpringBoot to find the BookService class and instantiate one for us
     //	and assign (INJECT) the class property with the value. This is Dependency Injection.
     //	our class depends on this service and SpringBook will inject it into our class
     private BookService bookService;
