@@ -23,6 +23,6 @@ public class mvcController {
 
         Godzilla.buildMVC(reverseUrl, entity);
         System.out.println("and we are done");
-        return "/";
+        return "redirect:/books/";              //  go to the book listing home page
     }
 }
