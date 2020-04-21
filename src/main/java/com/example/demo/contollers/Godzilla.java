@@ -1,19 +1,20 @@
 package com.example.demo.contollers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
-public class Builder {
+public class Godzilla {
 
     public static void main(String[] args) {
         String reversUrl = "com.example.demo";
         String entity = "cow";
+        buildMVC(reversUrl, entity);
+    }
+
+    public static void buildMVC(String reversUrl, String entity) {
         Class c;
         Field[] fields;
 
@@ -272,16 +273,18 @@ public class Builder {
         out.print("    //    our class depends on this service and Spring" + proper(entity) + " will inject it into our class\n");
         out.print("    private " + proper(entity) + "Service " + entity + "Service;\n");
         out.print("\n");
-        out.print("    /**\n");
-        out.print("     *         Environment     Provides access the the application.properties file. The getProperty method will retrieve\n");
-        out.print("     *                         the value of a property which we can use in the code. For instance in this Controller\n");
-        out.print("     *                         we are interested in the destination folder for the images we will be uploading. We save\n");
-        out.print("     *                         the folder in the properties files. This property is consistent and available to any\n");
-        out.print("     *                         code that wishes to use these same folders\n");
-        out.print("     */\n");
-        out.print("    @Autowired\n");
-        out.print("    private Environment environment;\n");
-        out.print("\n");
+        if (hasImage) {
+            out.print("    /**\n");
+            out.print("     *         Environment     Provides access the the application.properties file. The getProperty method will retrieve\n");
+            out.print("     *                         the value of a property which we can use in the code. For instance in this Controller\n");
+            out.print("     *                         we are interested in the destination folder for the images we will be uploading. We save\n");
+            out.print("     *                         the folder in the properties files. This property is consistent and available to any\n");
+            out.print("     *                         code that wishes to use these same folders\n");
+            out.print("     */\n");
+            out.print("    @Autowired\n");
+            out.print("    private Environment environment;\n");
+            out.print("\n");
+        }
         out.print("    @RequestMapping(\"/\")                                    //  this code will be reached by /" + entity + "s/\n");
         out.print("    public String index(Model model) {\n");
         out.print("        //  get a list of all " + entity + "s add to the model and list them\n");
