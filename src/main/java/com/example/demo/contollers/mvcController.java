@@ -12,16 +12,18 @@ public class mvcController {
     public String mvcCreate(Model model){
         model.addAttribute("reverseUrl", "com.example.demo");
         model.addAttribute("entity", "your class goes here");
+        model.addAttribute("findBy", true);
 
         return "Godzilla";
     }
 
     @RequestMapping(value = "/mvc/create", method = RequestMethod.POST)
-    public String save(@RequestParam String reverseUrl, String entity, Model model){
+    public String save(@RequestParam String reverseUrl, String entity, String findBy, Model model){
         model.addAttribute("reverseUrl", reverseUrl);
         model.addAttribute("entity", entity);
+        model.addAttribute("findBy", findBy);
 
-        Godzilla.buildMVC(reverseUrl, entity);
+        Godzilla.buildMVC(reverseUrl, entity, findBy.equals("true"));
         System.out.println("and we are done");
         return "redirect:/books/";              //  go to the book listing home page
     }

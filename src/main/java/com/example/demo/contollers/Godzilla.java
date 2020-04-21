@@ -11,10 +11,10 @@ public class Godzilla {
     public static void main(String[] args) {
         String reversUrl = "com.example.demo";
         String entity = "cow";
-        buildMVC(reversUrl, entity);
+        buildMVC(reversUrl, entity, true);
     }
 
-    public static void buildMVC(String reversUrl, String entity) {
+    public static void buildMVC(String reversUrl, String entity, boolean findBy) {
         Class c;
         Field[] fields;
 
@@ -22,12 +22,12 @@ public class Godzilla {
             c = Class.forName(reversUrl + ".models." + proper(entity));
             fields = c.getDeclaredFields();
 
-            buildListingPage(createFile("src\\main\\resources\\templates\\" + entity + "List.html"), entity, fields, "");
+            buildListingPage(createFile("src\\main\\resources\\templates\\" + entity + "List.html"), entity, fields, "", findBy);
             buildEditPage(createFile("src\\main\\resources\\templates\\" + entity + "Edit.html"), entity, fields, " Edit");
             buildDetailsPage(createFile("src\\main\\resources\\templates\\" + entity + "Details.html"), entity, fields, " Details");
 
-            buildService(createFile("src\\main\\java\\com\\example\\demo\\services\\" + proper(entity) + "Service.java"), entity, fields, reversUrl);
-            buildRepository(createFile("src\\main\\java\\com\\example\\demo\\repository\\" + proper(entity) + "Repository.java"), entity, fields, reversUrl);
+            buildService(createFile("src\\main\\java\\com\\example\\demo\\services\\" + proper(entity) + "Service.java"), entity, fields, reversUrl, findBy);
+            buildRepository(createFile("src\\main\\java\\com\\example\\demo\\repository\\" + proper(entity) + "Repository.java"), entity, fields, reversUrl, findBy);
             buildController(createFile("src\\main\\java\\com\\example\\demo\\contollers\\" + proper(entity) + "Controller.java"), entity, fields, reversUrl);
         } catch (Throwable e) {
             System.err.println(e);
@@ -73,27 +73,28 @@ public class Godzilla {
         out.close();
     }
 
-    private static void buildListingPage(PrintWriter out, String entity, Field[] fields, String action) {
+    private static void buildListingPage(PrintWriter out, String entity, Field[] fields, String action, boolean findBy) {
 
         printHeader(out, entity, action);
 
         out.print("<a href='/" + entity + "s/new'>Create " + proper(entity) + "</a>\n");
-
-        out.print("    <form class=\"form-horizontal\" th:action=\"@{/" + entity + "s/search}\" method=\"post\">\n");
-        out.print("        <div class=\"form-group\">\n");
-        for (Field f : fields) {
-            if (f.getName().equals("id") || f.getName().equals("version") || f.getName().equals("imageUrl"))
-                continue;
-            out.print("        <label class=\"col-sm-1 control-label\">" + proper(f.getName()) + ":</label>\n");
+        if (findBy) {
+            out.print("    <form class=\"form-horizontal\" th:action=\"@{/" + entity + "s/search}\" method=\"post\">\n");
+            out.print("        <div class=\"form-group\">\n");
+            for (Field f : fields) {
+                if (f.getName().equals("id") || f.getName().equals("version") || f.getName().equals("imageUrl"))
+                    continue;
+                out.print("        <label class=\"col-sm-1 control-label\">" + proper(f.getName()) + ":</label>\n");
+                out.print("        <div class=\"col-sm-2\">\n");
+                out.print("            <input type=\"text\" class=\"form-control\" name=\"" + f.getName() + "\" th:value=\"${" + f.getName() + "}\"/>\n");
+                out.print("        </div>\n");
+            }
             out.print("        <div class=\"col-sm-2\">\n");
-            out.print("            <input type=\"text\" class=\"form-control\" name=\"" + f.getName() + "\" th:value=\"${" + f.getName() + "}\"/>\n");
+            out.print("            <button type=\"submit\" class=\"btn btn-default\">Submit</button>\n");
             out.print("        </div>\n");
+            out.print("    </div>\n");
+            out.print("    </form>\n");
         }
-        out.print("        <div class=\"col-sm-2\">\n");
-        out.print("            <button type=\"submit\" class=\"btn btn-default\">Submit</button>\n");
-        out.print("        </div>\n");
-        out.print("    </div>\n");
-        out.print("    </form>\n");
         out.print("    <hr>\n");
         out.print("    <div th:if=\"${not #lists.isEmpty(" + entity + "s)}\">\n");
         out.print("        <h3>" + proper(entity) + " List</h3>\n");
@@ -170,7 +171,7 @@ public class Godzilla {
         out.close();
     }
 
-    public static void buildService(PrintWriter out, String entity, Field[] fields, String reverseURL) {
+    public static void buildService(PrintWriter out, String entity, Field[] fields, String reverseURL, boolean findBy) {
         out.print("package " + reverseURL + ".services;\n");
         out.print("\n");
         out.print("import " + reverseURL + ".models." + proper(entity) + ";\n");
@@ -207,19 +208,20 @@ public class Godzilla {
         out.print("        return " + entity + "Repository.save(" + entity + ");\n");
         out.print("    }\n");
         out.print("\n");
-
-        for (Field f : fields) {
-            if (f.getName().equals("id") || f.getName().equals("version")) continue;
-            String type = f.getType().getSimpleName();
-            out.print("    public Iterable<" + proper(entity) + "> findBy" + proper(f.getName()) + "(" + type + " " + f.getName() + ") {\n");
-            out.print("        return " + entity + "Repository.findBy" + proper(f.getName()) + "(" + f.getName() + ");\n");
+        if (findBy) {
+            for (Field f : fields) {
+                if (f.getName().equals("id") || f.getName().equals("version")) continue;
+                String type = f.getType().getSimpleName();
+                out.print("    public Iterable<" + proper(entity) + "> findBy" + proper(f.getName()) + "(" + type + " " + f.getName() + ") {\n");
+                out.print("        return " + entity + "Repository.findBy" + proper(f.getName()) + "(" + f.getName() + ");\n");
+            }
             out.print("    }\n\n");
+            out.print("}\n");
         }
-        out.print("}\n");
         out.close();
     }
 
-    public static void buildRepository(PrintWriter out, String entity, Field[] fields, String reverseURL) {
+    public static void buildRepository(PrintWriter out, String entity, Field[] fields, String reverseURL, boolean findBy) {
         out.print("package " + reverseURL + ".repository;\n");
         out.print("\n");
         out.print("import " + reverseURL + ".models." + proper(entity) + ";\n");
@@ -230,10 +232,12 @@ public class Godzilla {
         out.print("\n");
         out.print("@Repository\n");
         out.print("public interface " + proper(entity) + "Repository extends CrudRepository<" + proper(entity) + ", Integer> {\n");
-        for (Field f : fields) {
-            if (f.getName().equals("id") || f.getName().equals("version")) continue;
-            String type = f.getType().getSimpleName();
-            out.print("    List<" + proper(entity) + "> findBy" + proper(f.getName()) + "(" + type + " " + f.getName() + ");\n");
+        if ( findBy ) {
+            for (Field f : fields) {
+                if (f.getName().equals("id") || f.getName().equals("version")) continue;
+                String type = f.getType().getSimpleName();
+                out.print("    List<" + proper(entity) + "> findBy" + proper(f.getName()) + "(" + type + " " + f.getName() + ");\n");
+            }
         }
         out.print("}\n");
         out.close();
