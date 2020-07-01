@@ -240,8 +240,6 @@ public class Godzilla {
         out.print("import org.springframework.data.repository.CrudRepository;\n");
         out.print("import org.springframework.stereotype.Repository;\n");
         out.print("\n");
-        out.print("import java.util.List;\n");
-        out.print("\n");
         out.print("@Repository\n");
         out.print("public interface " + proper(entity) + "Repository extends CrudRepository<" + proper(entity) + ", Integer> {\n");
         if ( findBy ) {
@@ -277,8 +275,6 @@ public class Godzilla {
             out.print("import java.nio.file.Paths;\n");
         }
         out.print("\n");
-        out.print("import java.util.List;\n");
-        out.print("\n");
         out.print("@Controller\n");
         out.print("@RequestMapping(\"/" + entity + "s\")            //  this will add " + entity + "s to the start of all URL endpoints\n");
         out.print("public class " + proper(entity) + "Controller {\n");
@@ -286,7 +282,7 @@ public class Godzilla {
         out.print("    @Autowired\n");
         out.print("    //    @Autowired will request SpringBoot to find the " + proper(entity) + "Service class and instantiate one for us\n");
         out.print("    //    and assign (INJECT) the class property with the value. This is Dependency Injection.\n");
-        out.print("    //    our class depends on this service and Spring" + proper(entity) + " will inject it into our class\n");
+        out.print("    //    our class depends on this service and SpringBoot will inject it into our class\n");
         out.print("    private " + proper(entity) + "Service " + entity + "Service;\n");
         out.print("\n");
         if (hasImage) {

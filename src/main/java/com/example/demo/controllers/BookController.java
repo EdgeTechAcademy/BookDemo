@@ -5,10 +5,7 @@ import com.example.demo.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/books")            //  this will add books to the start of all URL endpoints
@@ -17,7 +14,7 @@ public class BookController {
     @Autowired
     //	@Autowired will request SpringBoot to find the BookService class and instantiate one for us
     //	and assign (INJECT) the class property with the value. This is Dependency Injection.
-    //	our class depends on this service and SpringBook will inject it into our class
+    //	our class depends on this service and SpringBoot will inject it into our class
     private BookService bookService;
 
     @RequestMapping("/")                                    //  this code will be reached by /books/
