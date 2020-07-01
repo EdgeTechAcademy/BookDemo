@@ -1,4 +1,4 @@
-package com.example.demo.contollers;
+package com.example.demo.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +23,7 @@ public class mvcController {
         model.addAttribute("entity", entity);
         model.addAttribute("findBy", findBy);
 
-        Godzilla.buildMVC(reverseUrl, entity, findBy.equals("true"));
+        Godzilla.buildMVC(reverseUrl, entity, findBy == null ? false : findBy.equals("true"));
         System.out.println("and we are done");
         return "redirect:/books/";              //  go to the book listing home page
     }

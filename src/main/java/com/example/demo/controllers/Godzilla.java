@@ -1,4 +1,4 @@
-package com.example.demo.contollers;
+package com.example.demo.controllers;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,26 +9,26 @@ import java.util.Arrays;
 public class Godzilla {
 
     public static void main(String[] args) {
-        String reversUrl = "com.example.demo";
+        String reverseUrl = "com.example.demo";
         String entity = "cow";
-        buildMVC(reversUrl, entity, true);
+        buildMVC(reverseUrl, entity, true);
     }
 
-    public static void buildMVC(String reversUrl, String entity, boolean findBy) {
+    public static void buildMVC(String reverseUrl, String entity, boolean findBy) {
         Class c;
         Field[] fields;
 
         try {
-            c = Class.forName(reversUrl + ".models." + proper(entity));
+            c = Class.forName(reverseUrl + ".models." + proper(entity));
             fields = c.getDeclaredFields();
 
             buildListingPage(createFile("src\\main\\resources\\templates\\" + entity + "List.html"), entity, fields, "", findBy);
             buildEditPage(createFile("src\\main\\resources\\templates\\" + entity + "Edit.html"), entity, fields, " Edit");
             buildDetailsPage(createFile("src\\main\\resources\\templates\\" + entity + "Details.html"), entity, fields, " Details");
 
-            buildService(createFile("src\\main\\java\\com\\example\\demo\\services\\" + proper(entity) + "Service.java"), entity, fields, reversUrl, findBy);
-            buildRepository(createFile("src\\main\\java\\com\\example\\demo\\repository\\" + proper(entity) + "Repository.java"), entity, fields, reversUrl, findBy);
-            buildController(createFile("src\\main\\java\\com\\example\\demo\\contollers\\" + proper(entity) + "Controller.java"), entity, fields, reversUrl);
+            buildService(createFile("src\\main\\java\\com\\example\\demo\\services\\" + proper(entity) + "Service.java"), entity, fields, reverseUrl, findBy);
+            buildRepository(createFile("src\\main\\java\\com\\example\\demo\\repository\\" + proper(entity) + "Repository.java"), entity, fields, reverseUrl, findBy);
+            buildController(createFile("src\\main\\java\\com\\example\\demo\\controllers\\" + proper(entity) + "Controller.java"), entity, fields, reverseUrl);
         } catch (Throwable e) {
             System.err.println(e);
         }
@@ -37,6 +37,7 @@ public class Godzilla {
     private static void buildEditPage(PrintWriter out, String entity, Field[] fields, String action) {
 
         boolean hasImage = Arrays.stream(fields).anyMatch(f -> f.getName().equals("imageUrl"));
+        String type;
 
         printHeader(out, entity, action);
         out.print("    <h2>" + proper(entity) + " Details</h2>\n");
@@ -54,7 +55,8 @@ public class Godzilla {
                     out.print("                    <input type=\"hidden\" th:field=\"*{imageUrl}\"/>\n");
                     out.print("                    <input type=\"file\" class=\"form-control\" name=\"file\" /> <br/>\n");
                 } else {
-                    out.print("                    <input type=\"text\" class=\"form-control\" th:field=\"*{" + f.getName() + "}\"/>\n");
+                    type = getType(f.getType());
+                    out.print("                    <input type=\""+ type +"\" class=\"form-control\" th:field=\"*{" + f.getName() + "}\"/>\n");
                 }
                 out.print("                </div>\n");
                 out.print("            </div>\n");
@@ -72,6 +74,16 @@ public class Godzilla {
         out.print("</html>\n");
         out.close();
     }
+
+    private static String getType(Class<?> type) {
+        switch (type.getTypeName()) {
+            case "string" : return "text";
+            case "int" : return "number";
+            case "boolean" : return "checkbox";
+            default : return "text";
+        }
+    }
+
 
     private static void buildListingPage(PrintWriter out, String entity, Field[] fields, String action, boolean findBy) {
 
@@ -214,10 +226,10 @@ public class Godzilla {
                 String type = f.getType().getSimpleName();
                 out.print("    public Iterable<" + proper(entity) + "> findBy" + proper(f.getName()) + "(" + type + " " + f.getName() + ") {\n");
                 out.print("        return " + entity + "Repository.findBy" + proper(f.getName()) + "(" + f.getName() + ");\n");
+                out.print("    }\n");
             }
-            out.print("    }\n\n");
-            out.print("}\n");
         }
+        out.print("}\n");
         out.close();
     }
 
@@ -247,7 +259,7 @@ public class Godzilla {
 
         boolean hasImage = Arrays.stream(fields).anyMatch(f -> f.getName().equals("imageUrl"));
 
-        out.print("package " + reverseURL + ".contollers;\n");
+        out.print("package " + reverseURL + ".controllers;\n");
         out.print("\n");
         out.print("import " + reverseURL + ".models." + proper(entity) + ";\n");
         out.print("import " + reverseURL + ".services." + proper(entity) + "Service;\n");

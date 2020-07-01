@@ -1,4 +1,4 @@
-package com.example.demo.contollers;
+package com.example.demo.controllers;
 
 import com.example.demo.models.Book;
 import com.example.demo.services.BookService;
@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/books")            //  this will add books to the start of all URL endpoints
