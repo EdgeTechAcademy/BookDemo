@@ -11,24 +11,26 @@ public class Godzilla {
     public static void main(String[] args) {
         String reverseUrl = "com.example.demo";
         String entity = "cow";
-        buildMVC(reverseUrl, entity, true);
+        buildMVC(reverseUrl, entity, true, true, true);
     }
 
-    public static void buildMVC(String reverseUrl, String entity, boolean findBy) {
+    public static void buildMVC(String reverseUrl, String entity, boolean findBy, boolean createHTML, boolean createJava) {
         Class c;
         Field[] fields;
 
         try {
             c = Class.forName(reverseUrl + ".models." + proper(entity));
             fields = c.getDeclaredFields();
-
-            buildListingPage(createFile("src\\main\\resources\\templates\\" + entity + "List.html"), entity, fields, "", findBy);
-            buildEditPage(createFile("src\\main\\resources\\templates\\" + entity + "Edit.html"), entity, fields, " Edit");
-            buildDetailsPage(createFile("src\\main\\resources\\templates\\" + entity + "Details.html"), entity, fields, " Details");
-
-            buildService(createFile("src\\main\\java\\com\\example\\demo\\services\\" + proper(entity) + "Service.java"), entity, fields, reverseUrl, findBy);
-            buildRepository(createFile("src\\main\\java\\com\\example\\demo\\repository\\" + proper(entity) + "Repository.java"), entity, fields, reverseUrl, findBy);
-            buildController(createFile("src\\main\\java\\com\\example\\demo\\controllers\\" + proper(entity) + "Controller.java"), entity, fields, reverseUrl);
+            if (createHTML) {
+                buildListingPage(createFile("src\\main\\resources\\templates\\" + entity + "List.html"), entity, fields, "", findBy);
+                buildEditPage(createFile("src\\main\\resources\\templates\\" + entity + "Edit.html"), entity, fields, " Edit");
+                buildDetailsPage(createFile("src\\main\\resources\\templates\\" + entity + "Details.html"), entity, fields, " Details");
+            }
+            if (createJava) {
+                buildService(createFile("src\\main\\java\\com\\example\\demo\\services\\" + proper(entity) + "Service.java"), entity, fields, reverseUrl, findBy);
+                buildRepository(createFile("src\\main\\java\\com\\example\\demo\\repository\\" + proper(entity) + "Repository.java"), entity, fields, reverseUrl, findBy);
+                buildController(createFile("src\\main\\java\\com\\example\\demo\\controllers\\" + proper(entity) + "Controller.java"), entity, fields, reverseUrl);
+            }
         } catch (Throwable e) {
             System.err.println(e);
         }

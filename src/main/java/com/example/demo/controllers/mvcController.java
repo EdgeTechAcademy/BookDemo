@@ -22,8 +22,13 @@ public class mvcController {
         model.addAttribute("reverseUrl", reverseUrl);
         model.addAttribute("entity", entity);
         model.addAttribute("findBy", findBy);
+//        model.addAttribute("noHTML", noHTML);
+//        model.addAttribute("noJava", noJava);
 
-        Godzilla.buildMVC(reverseUrl, entity.toLowerCase(), findBy == null ? false : findBy.equals("true"));
+        Godzilla.buildMVC(reverseUrl, entity.toLowerCase(),
+                                findBy == null ? false : findBy.equals("true"), true, true);
+//                                noHTML == null ? true : !noHTML.equals("true"),     //  i know bad logic if the checkbox is null or false create the pages / code
+//                                noJava == null ? true : !noJava.equals("true"));    //  if the checkbox is true do not create the pages / code
         System.out.println("and we are done");
         return "redirect:/books/";              //  go to the book listing home page
     }
