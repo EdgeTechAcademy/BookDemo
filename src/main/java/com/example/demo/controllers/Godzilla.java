@@ -58,7 +58,7 @@ public class Godzilla {
                     out.print("                    <input type=\"file\" class=\"form-control\" name=\"file\" /> <br/>\n");
                 } else {
                     type = getType(f.getType());
-                    out.print("                    <input type=\""+ type +"\" class=\"form-control\" th:field=\"*{" + f.getName() + "}\"/>\n");
+                    out.print("                    <input type=\"" + type + "\" class=\"form-control\" th:field=\"*{" + f.getName() + "}\"/>\n");
                 }
                 out.print("                </div>\n");
                 out.print("            </div>\n");
@@ -79,10 +79,10 @@ public class Godzilla {
 
     private static String getType(Class<?> type) {
         switch (type.getTypeName()) {
-            case "string" : return "text";
-            case "int" : return "number";
-            case "boolean" : return "checkbox";
-            default : return "text";
+            case "string"   :   return "text";
+            case "int"      :   return "number";
+            case "boolean"  :   return "checkbox";
+            default         :   return "text";
         }
     }
 
@@ -241,10 +241,13 @@ public class Godzilla {
         out.print("import " + reverseURL + ".models." + proper(entity) + ";\n");
         out.print("import org.springframework.data.repository.CrudRepository;\n");
         out.print("import org.springframework.stereotype.Repository;\n");
+        if (findBy) {
+            out.print("\nimport java.util.List;\n");
+        }
         out.print("\n");
         out.print("@Repository\n");
         out.print("public interface " + proper(entity) + "Repository extends CrudRepository<" + proper(entity) + ", Integer> {\n");
-        if ( findBy ) {
+        if (findBy) {
             for (Field f : fields) {
                 if (f.getName().equals("id") || f.getName().equals("version")) continue;
                 String type = f.getType().getSimpleName();
