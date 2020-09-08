@@ -29,7 +29,7 @@ public class BookController {
 
     //  let's CREATE a new book
     @RequestMapping("/new")
-    public String newCustomer(Model model){
+    public String newBook(Model model){
         //  since we do not have a book, let's send an empty book to the bookEdit page
         model.addAttribute("book", new Book());
         return "bookEdit";
@@ -37,7 +37,7 @@ public class BookController {
 
     //  id will be the key to the book we want to READ from the database
     @RequestMapping("/{id}")
-    public String read(@PathVariable Integer id, Model model){
+    public String readBook(@PathVariable Integer id, Model model){
         //  find in the database a book with id = to our PathVariable
         Book book = bookService.getBookById(id);
 
@@ -56,7 +56,7 @@ public class BookController {
 
     //  id will be the key to the book we want to UPDATE
     @RequestMapping("/edit/{id}")
-    public String update(@PathVariable Integer id, Model model){
+    public String updateBook(@PathVariable Integer id, Model model){
         //  find the book in the database and send that data to the bookEdit page
         model.addAttribute("book", bookService.getBookById(id));
         return "bookEdit";
@@ -65,7 +65,7 @@ public class BookController {
     //  we have finished making our changes to our book. The data is POSTed back to the server
     //  all of the data is saved in a Book object and UPDATEd in the database.
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save(Book book){
+    public String saveBook(Book book){
         //  all we have to do is save the book
         bookService.saveBook(book);
         //  go to the list all books page when complete
@@ -74,7 +74,7 @@ public class BookController {
 
     //  using the id from the URL find and DELETE our book
     @RequestMapping("/delete/{id}")
-    public String delete(@PathVariable Integer id){
+    public String deleteBook(@PathVariable Integer id){
         bookService.deleteBook(id);
         //  go to the list all books page when complete
         return "redirect:/books/";
