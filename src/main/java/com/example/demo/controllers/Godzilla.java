@@ -91,7 +91,7 @@ public class Godzilla {
 
         printHeader(out, entity, action);
 
-        out.print("<a href='/" + entity + "s/new'>Create " + proper(entity) + "</a>\n");
+        out.print("    <a href='/" + entity + "s/new'>Create " + proper(entity) + "</a>\n");
         if (findBy) {
             out.print("    <form class=\"form-horizontal\" th:action=\"@{/" + entity + "s/search}\" method=\"post\">\n");
             out.print("        <div class=\"form-group\">\n");
