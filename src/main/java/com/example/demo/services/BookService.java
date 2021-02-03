@@ -12,7 +12,7 @@ public class BookService {
 /**
  * 		ATTENTION	BookService
  * 				These are the APIs we expose to the Controllers
- * 				We pretty much have all of them enable. Frequently you would change how the delete code works
+ * 				We pretty much have all of them enabled. Frequently you would change how the delete code works
  * 				probably by setting an 'active' attribute to false and saving the record and NOT deleting anything
  *          These lines of code to a great deal of work
  *          We extend the CrudRepository which makes this object knowledgeable about
@@ -54,5 +54,9 @@ public class BookService {
 
     public Iterable<Book> findByAuthor(String author) {
         return bookRepository.findByAuthor(author);
+    }
+
+    public Iterable<Book> findBooksBy(String author) {
+        return bookRepository.findByAuthorContaining(author);
     }
 }

@@ -25,4 +25,8 @@ import java.util.List;
 public interface BookRepository extends CrudRepository<Book, Integer> {
     List<Book> findByAuthor(String author);
     List<Book> findByTitleContaining(String title);
+    List<Book> findByAuthorContaining(String author);
+
+//    @Query("SELECT a FROM Book a WHERE a.author like %:author%")
+//    List<Book> booksBy(@Param("author") String author);
 }

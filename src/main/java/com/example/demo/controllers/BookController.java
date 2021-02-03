@@ -27,6 +27,20 @@ public class BookController {
         return "bookList";
     }
 
+    @RequestMapping("/by/{by}")                                    //  this code will be reached by /books/by/Authors Name
+    public String byAuthor(@PathVariable String by, Model model) {
+        //  get a list of all books add to the model and list them
+//        Iterable<Book> books = bookService.listAllBooks();
+//        List<Book> list = StreamSupport
+//                .stream(books.spliterator(), false).filter(b -> b.getAuthor().toLowerCase().indexOf(by.toLowerCase()) >= 0)
+//                .collect(Collectors.toList());
+
+        model.addAttribute("books", bookService.findBooksBy(by));
+
+        //  the the bookList page will be happy to display it
+        return "bookList";
+    }
+
     //  let's CREATE a new book
     @RequestMapping("/new")
     public String newBook(Model model){
@@ -112,14 +126,14 @@ public class BookController {
     @RequestMapping("/add")                                    //  this code will be reached by /books/add
     public String add(Model model) {
         //  create lists of random titles and things and authors
-        String[] titles = {"Master", "Ruler", "Lord", "King", "Programmer", "Dude"};
-        String[] things = {"Rings", "Kitchen", "Code", "Keyboard", "Debugger"};
+        String[] titles = {"Attack", "Revenge", "Master", "Ruler", "Lord", "King", "Programmer", "Dude", "War for the Planet", "Return", "Fellowship", "Silence", "Raiders", "Gurdians", "Queen", "Pirates", "End"};
+        String[] subjects = {"Rings", "Kitchen", "Code", "Keyboard", "Debugger", "Nerds", "Apes", "Lambs", "Lost Arc", "Jedi", "Galaxy", "Caribbean", "World"};
         String[] authors = {"Tolkien", "Heinlein", "Asimov", "Adams", "Clarke"};
         String title, thing, author;
 
         //  randomly create choose a title, object and author from our lists
         title = titles[(int)(Math.random()*titles.length)];                   //  choose a random title
-        thing = things[(int)(Math.random()*things.length)];               //  choose a random object
+        thing = subjects[(int)(Math.random()*subjects.length)];               //  choose a random subject
         author = authors[(int)(Math.random()*authors.length)];          //  choose a random author
         int numberOfPages = (int)(Math.random()*600) + 100;             //  make book at least 100 page but less than 700
 
